@@ -5,6 +5,7 @@ namespace app\api\controller\v1;
 use app\api\validate\AddWxUser;
 use app\api\validate\UploadValidate;
 use think\Exception;
+use think\Image;
 use app\lib\exception\BannerMissException;
 use app\lib\exception\UploadException;
 

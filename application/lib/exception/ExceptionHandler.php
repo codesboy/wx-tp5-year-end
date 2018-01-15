@@ -44,7 +44,8 @@ class ExceptionHandler extends Handle{
 
         }
 
-        $request = Request::instance();
+        // $request = Request::instance();
+        $request = new Request();
 
 
         $result=[
