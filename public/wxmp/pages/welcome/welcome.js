@@ -7,6 +7,8 @@ Page({
         userInfo: {}
     },
     onLoad: function () {
+        
+        
         console.log('onLoad');
 
         let _this = this;
@@ -70,6 +72,30 @@ Page({
                 console.log(that)
             }
         })
+    },
+
+    // 上传图片
+    upload: function () {
+        wx.chooseImage({
+            success: function (res) {
+                var tempFilePaths = res.tempFilePaths
+                wx.uploadFile({
+                    url: 'http://year.com/api/v1/upload', //后台图片上传接口
+                    filePath: tempFilePaths[0],
+                    name: 'file',
+                    formData: {
+                        'user': 'test'
+                    },
+                    success: function (res) {
+                        var data = res.data
+                        console.log(data)
+                    },
+                    fail:function(){
+                        console.log('fail')
+                    }
+                })
+            }
+        });
     }
 
 

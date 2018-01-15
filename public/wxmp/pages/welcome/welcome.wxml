@@ -1,8 +1,8 @@
 <!-- welcome.wxml -->
-<view class="container">  
-  <view  bindtap="bindViewTap" class="userinfo">  
-    <image class="userinfo-avatar" src="{{userInfo.avatarurl}}" background-size="cover"></image>  
-    <text class="userinfo-nickname">{{userInfo.nickname}}</text>  
-  </view>  
-
-</view>  
+<view class="container">
+    <image src='/static/add.png' class='choosepic' bindtap='upload'></image>
+    <view bindtap="bindViewTap" class="userinfo">
+        <image class="userinfo-avatar" src="{{userInfo.avatarurl}}" background-size="cover"></image>
+        <text class="userinfo-nickname">{{userInfo.nickname}}</text>
+    </view>
+</view>
