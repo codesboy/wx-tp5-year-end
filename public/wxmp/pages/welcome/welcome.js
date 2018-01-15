@@ -13,10 +13,7 @@ Page({
         wx.getUserInfo({
             success: res => {
                 // 用户授权成功的处理
-                
-                this.setData({
-                    userInfo: res.userInfo
-                })
+                _this.saveUserData(_this, { nickname: res.userInfo.nickName, avatarurl: res.userInfo.avatarUrl, code: app.globalData.code });                
             },
             fail: () => {//用户点了拒绝
                 wx.showModal({//向用户提示需要权限才能继续
@@ -46,9 +43,10 @@ Page({
                 if (res.authSetting["scope.userInfo"] == true) {// 如果用户成功打开授权
                     wx.getUserInfo({
                         success: res => {
-                            that.setData({
-                                userInfo: res.userInfo
-                            })
+                            that.saveUserData(that,{ nickname: res.userInfo.nickName, avatarurl: res.userInfo.avatarUrl });
+                            // that.setData({
+                            //     userInfo: res.userInfo
+                            // })
                         }
                     })
                 } else {
@@ -59,10 +57,18 @@ Page({
     },
 
     // 发送用户信息数据到后台接口
-    saveUserData:()=>{
+    saveUserData:(that,datas)=>{
         wx.request({
-            url: 'https://www.my-domain.com/wx/onlogin',
-            data: { userInfo: d }
+            withCredentials: true,
+            url: 'http://year.com/api/v1/adduser',
+            method: 'post',
+            data: datas,
+            success: function (res) {
+                that.setData({
+                    userInfo: datas
+                });
+                console.log(that)
+            }
         })
     }
 

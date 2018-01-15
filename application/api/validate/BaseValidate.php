@@ -1,13 +1,14 @@
 <?php
 namespace app\api\validate;
 use think\Validate;
-use think\Request;
+// use think\Request;
 use think\Exception;
 use app\lib\exception\ParameterException;
 class BaseValidate extends Validate{
     public function doCheck(){
         // 获取所有http参数
-        $params=Request::instance()->param();
+        $params=request()->param();
+
 
         // $this就是validate对象 因为类继承了Validate
         $result=$this->batch()->check($params);//批量验证结果

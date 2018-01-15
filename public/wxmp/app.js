@@ -7,7 +7,9 @@ App({
                 let code = res.code;
                 if (code) {
                     let _this = this;
+                    _this.globalData.code=code;
                     console.log('获取用户登录凭证：' + code);
+
                 } else {
                     wx.showModal({
                         title: '错误',
@@ -16,5 +18,8 @@ App({
                 }
             }
         });
+    },
+    globalData:{
+        code:null
     }
 })  

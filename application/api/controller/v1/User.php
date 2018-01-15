@@ -1,10 +1,8 @@
 <?php
 namespace app\api\controller\v1;
 
-// use think\Controller;
-// use think\Db;
-// use think\Validate;
-use app\api\validate\IdPositiveInt;
+
+use app\api\validate\AddWxUser;
 use think\Exception;
 use app\lib\exception\BannerMissException;
 
@@ -15,7 +13,10 @@ class User{
 
     // 保存小程序客户端传来的用户信息
     public function saveUserInfo(){
-        return "sa";
+        (new AddWxUser())->docheck();
+        $user = new UserModel();
+        dump(request()->param());
+        // return 1;
     }
 
 }

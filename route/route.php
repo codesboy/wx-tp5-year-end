@@ -9,5 +9,6 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-// banner接口路由
-Route::get('api/:version/user','api/:version.User/saveUserData');
+
+// 微信用户信息写入数据库接口 api/v1/adduser
+Route::post('api/:version/adduser','api/:version.User/saveUserInfo');
