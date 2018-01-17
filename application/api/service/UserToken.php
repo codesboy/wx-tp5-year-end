@@ -11,18 +11,17 @@ class UserToken extends Token{
     protected $code;
     protected $wxAppID;
     protected $wxAppSecret;
-    protected $wxLoginUrl;
+    protected $wxOpenidApi;
 
     function __construct($code){
         $this->code=$code;
-        $this->wxAppID=config('wechat.app_id');
-        $this->wxAppSecret=config('wechat.app_secret');
-        $this->wxLoginUrl=sprintf(config('wechat.login_url'),$this->wxAppID,$this->wxAppSecret,$this->code);
+        $this->wxAppID=config('wechat.appid');
+        $this->wxAppSecret=config('wechat.secret');
+        $this->wxOpenidApi=sprintf(config('wechat.get_openid_api'),$this->wxAppID,$this->wxAppSecret,$this->code);
     }
 
     public function get(){
-        $result=curl_get($this->wxLoginUrl);
-        // $result=curl_get('https://api.weixin.qq.com/sns/jscode2session?appid=wxb87146459a7b65ac&secret=f9c25252b1ab037df78490192e23cf0c&js_code=081gLPdY0t2UgZ1bMKdY0JmPdY0gLPdC&grant_type=authorization_code');
+        $result=curl_get($this->wxOpenidApi);
         $wxResult=json_decode($result,true);//将json格式字符串转换成数组格式
         if(empty($wxResult)){
             throw new Exception('获取session_key和openID时异常，微信内部错误');//此异常不会返回到客户端去
@@ -52,7 +51,7 @@ class UserToken extends Token{
         // 3.生成令牌，准备缓存数据，写入缓存（key:令牌   value：wxResult,uid,scope）
         // 4.把令牌返回到客户端
 
-        // return $wxResult;
+        // return $wxResult;die;
         $openid=$wxResult['openid'];
         $user=UserModel::getByOpenID($openid);
         if($user){
@@ -69,6 +68,7 @@ class UserToken extends Token{
 
     // 新增用户
     private function addUser($openid){
+        // dump(UserModel);die;
         $user=UserModel::create([
             'openid'=>$openid,
         ]);

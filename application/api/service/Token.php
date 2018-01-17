@@ -1,7 +1,7 @@
 <?php
 namespace app\api\service;
-use think\Request;
-use think\Cache;
+use think\facade\Request;
+use think\facade\Cache;
 use app\lib\exception\TokenException;
 use think\Exception;
 
@@ -30,7 +30,9 @@ class Token
 
     public static function getCurrentTokenVar($key){
         // 获取用户携带的token 在http请求的header里面
-        $token=Request::instance()->header('token');
+        // $token=Request::instance()->header('token');
+        // tp5.1
+        $token=Request::header('token');
 
         // 从缓存中获取token对应的值
         $vars = Cache::get($token);

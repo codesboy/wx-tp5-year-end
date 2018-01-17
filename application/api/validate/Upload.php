@@ -1,7 +1,7 @@
 <?php
 namespace app\api\validate;
 use app\api\validate\BaseValidate;
-class UploadValidate extends BaseValidate{
+class Upload extends BaseValidate{
     protected $rule=[
         'file'=>'require|image|fileSize:6291456'
         // 'sign_num'=>'require|isPositiveInteger|unique:uploads'

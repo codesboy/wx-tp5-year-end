@@ -14,4 +14,11 @@
 Route::post('api/:version/adduser','api/:version.User/saveUserInfo');
 
 // 用户上传图片接口
-Route::post('api/:version/upload','api/:version.User/saveUploadFile');
+// Route::post('api/:version/upload','api/:version.User/saveUploadFile');
+
+
+//小程序携带code得到token接口   用post是为了不让code参数在url里显示出来
+Route::post('api/:version/token/user','api/:version.Token/getToken');
+
+// 用户上传图片接口
+Route::post('api/:version/upload/user','api/:version.Barrage/upload');
