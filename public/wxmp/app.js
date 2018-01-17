@@ -17,10 +17,10 @@ App({
                             _this.globalData.token = res.data.token;
                             console.log(_this.globalData.token)
                         },
-                        fail:function(){
+                        fail:function(e){
                             wx.showModal({
                                 title: '错误',
-                                content: 'request发生错误',
+                                content: e.errMsg,
                             })
                         }
                     })

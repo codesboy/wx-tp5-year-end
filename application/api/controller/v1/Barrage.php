@@ -4,8 +4,9 @@ namespace app\api\controller\v1;
 
 use app\api\validate\SendBarrage;
 use app\api\validate\Upload as UploadValidate;
-// use think\Exception;
-use \think\Image;
+use think\Exception;
+use think\Image;
+use think\facade\Env;
 use app\lib\exception\UserException;
 use app\lib\exception\UploadException;
 use app\lib\exception\SuccessMessage;
@@ -52,7 +53,6 @@ class Barrage{
 
     private function getUploadImg(){
         // 获取表单上传文件
-
         $file = request()->file('image');
         // $num=request()->param('num');
         // dump($_FILES);die;
@@ -93,40 +93,14 @@ class Barrage{
         // 唯一文件名 微妙md5加密
         $saveName = md5(uniqid(microtime(true),true)) . '.' . $image->type();
         // 保存图片
-        $image->save(ROOT_PATH . 'public/uploads/' . $saveName);
+        $root_path=Env::get('root_path');
+        // dump($root_path);die;
+        $image->save($root_path . 'public/uploads/' . $saveName);
         if(empty($image)){
             return;
         }
+        return $saveName;
 
-        $arr=[];
-        // $arr['sign_num']=$num;
-        $arr['img_url']=$saveName;
-        return $arr;
-
-    }
-
-
-    private function saveUploadFile($user){
-        // dump(UploadException);die;
-        $data=$this->doUpload();
-        if(!empty($data)){
-            $res = $user->barrages()->save($data);
-            if(!$res){
-                throw new UploadException([
-                    'msg'=>'上传失败',
-                    'code'=>400,
-                    'errorCode'=>6000
-                ]);
-            }else{
-                // dump(UploadException);die;
-                throw new UploadException([
-                    'msg'=>'上传成功',
-                    'code'=>200,
-                    'errorCode'=>0
-                ]);
-
-            }
-        }
     }
 
 }

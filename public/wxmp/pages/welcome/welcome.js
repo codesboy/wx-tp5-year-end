@@ -8,10 +8,7 @@ Page({
         tempFilePaths:null
     },
     onLoad: function () {
-        
-        
         console.log('onLoad');
-
         let _this = this;
         wx.getUserInfo({
             success: res => {
@@ -127,10 +124,10 @@ Page({
                     })
                 }
             },
-            fail: function () {
+            fail: function (e) {
                 wx.showModal({
                     title: '错误',
-                    content: 'upload发生错误',
+                    content: e.errMsg,
                 })
             }
         })
