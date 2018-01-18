@@ -12,7 +12,7 @@ class Upload extends BaseValidate{
     protected $message=[
         'file.require' => '请选择上传文件!',
         'file.image' => '非法图像文件!',
-        'file.fileSize' => '图片文件大小不能超过6M!',
+        'file.fileSize' => '图片文件大小不能超过10M!',
         // 'sign_num.require'=>'请填写签到号码!',
         // 'sign_num.isPositiveInteger'=>'签到号码必须是正整数!',
         // 'sign_num.unique'=>'该签到号码已经存在了!'

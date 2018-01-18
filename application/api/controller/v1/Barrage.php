@@ -12,6 +12,7 @@ use app\lib\exception\UploadException;
 use app\lib\exception\SuccessMessage;
 
 use app\api\model\User as UserModel;
+use app\api\model\Barrage as BarrageModel;
 
 use app\api\service\Token as TokenService;
 
@@ -50,5 +51,14 @@ class Barrage{
         return json_encode(new SuccessMessage());
     }
 
+
+    public function getBarrage(){
+        $last_barrage=BarrageModel::get();
+        $count=BarrageModel::count();
+        return [
+            'last_barrage'=>$last_barrage,
+            'count'=>
+        ]
+    }
 
 }
