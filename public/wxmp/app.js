@@ -8,14 +8,15 @@ App({
                 if (code) {
                     let _this = this;
                     _this.globalData.code=code;
-                    console.log('获取用户登录凭证：' + code);
+                    // console.log('获取用户登录凭证：' + code);
                     wx.request({
-                        url: 'http://year.com/api/v1/token/user',
+                        // url: 'http://year.com/api/v1/token/user',
+                        url: _this.globalData.baseUrl+'token/user',
                         data:{code:code},
                         method:'POST',
                         success:res=>{
                             _this.globalData.token = res.data.token;
-                            console.log(_this.globalData.token)
+                            // console.log(_this.globalData.token)
                         },
                         fail:function(e){
                             wx.showModal({
@@ -35,6 +36,8 @@ App({
     },
     globalData:{
         code:null,
-        token:null
+        token:null,
+        baseUrl:'https://me.rehack.cn/api/v1/'
+        // baseUrl: 'http://year.com/api/v1/'
     }
 })  

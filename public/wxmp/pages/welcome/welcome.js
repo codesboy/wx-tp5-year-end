@@ -5,7 +5,8 @@ Page({
     data: {
         motto: 'Hello World',
         userInfo: {},
-        tempFilePaths:null
+        tempFilePaths:null,
+        per:''//上传进度
     },
     onLoad: function () {
         console.log('onLoad');
@@ -60,7 +61,8 @@ Page({
     saveUserData:(that,datas)=>{
         wx.request({
             withCredentials: true,
-            url: 'http://year.com/api/v1/adduser',
+            // url: 'http://year.com/api/v1/adduser',
+            url: app.globalData.baseUrl+'adduser',
             method: 'post',
             data: datas,
             success: function (res) {
@@ -76,51 +78,79 @@ Page({
     chooseimg:function(){
         let _this = this;
         wx.chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'],
             success: function (res) {
+                // console.log(res)
                 var tempFilePaths = res.tempFilePaths;
-                _this.setData({
-                    tempFilePaths: res.tempFilePaths
-                });
-                // wx.uploadFile({
-                //     url: 'http://year.com/api/v1/upload', //后台图片上传接口
-                //     filePath: tempFilePaths[0],
-                //     name: 'file',
-                //     formData: {
-                //         'user': 'test'
-                //     },
+                if (tempFilePaths){
+                    _this.setData({
+                        tempFilePaths: res.tempFilePaths
+                    });
+                }else{
+                    wx.showToast({
+                        title: '没有得到tempFilePaths',
+                    })
+                }
+                
+                // wx.getImageInfo({
+                //     src: res.tempFilePaths[0],
                 //     success: function (res) {
-                //         var data = res.data
-                //         console.log(data)
+                //         console.log(res)
                 //     },
-                //     fail:function(){
-                //         console.log('fail')
+                //     fail:function(e){
+                //         console.log(e.errMsg)
                 //     }
-                // })
+                // });
+                // console.log(_this.data)
+            },
+            fail:function(e){
+                wx.showModal({
+                    title: '错误',
+                    content: e.errMsg,
+                })
             }
+        });
+    },
+    previewImage: function (e) {
+        var that = this;
+        var dataid = e.currentTarget.dataset.id;
+        var imageList = that.data.imageList;
+        wx.previewImage({
+            current: imageList[dataid],
+            urls: this.data.imageList
         });
     },
     userUpload: function(e){
         let _this= this;
         // console.log(e.detail);
         // console.log(this.data);
-        console.log(app.globalData)
-        wx.uploadFile({
-            url: 'http://year.com/api/v1/upload/user', //后台图片上传接口
+        // console.log(app.globalData)
+        const uploadTask = wx.uploadFile({
+            // url: 'http://year.com/api/v1/upload/user', //后台图片上传接口
+            url: app.globalData.baseUrl +'/sign', //后台图片上传接口
             filePath: this.data.tempFilePaths[0],
             name: 'image',
-            header: {token:app.globalData.token},
-            formData: {
-                'msg': e.detail.value.msg,
-            },
+            header: {"token":app.globalData.token},
             success: function (res) {
-                console.log(res.data);
-                return false;
+                console.log(res.data)
+                // console.log(typeof(res.data))
+                // return false;
                 var data = JSON.parse(res.data);
-                console.log(typeof(data))
+                // console.log(data)
                 if(data.code==201 && data.msg=='OK'){
                     wx.showToast({
-                        title: '弹幕发送成功!',
+                        title: '签到成功!',
                         duration:2000
+                    });
+                    _this.setData({
+                        tempFilePaths:''
+                    })
+                }else{
+                    wx.showModal({
+                        title: '错误',
+                        content: JSON.stringify(data),
                     })
                 }
             },
@@ -130,6 +160,14 @@ Page({
                     content: e.errMsg,
                 })
             }
+        });
+        uploadTask.onProgressUpdate((res) => {
+            this.setData({
+                per: res.progress
+            })
+            // console.log('上传进度', res.progress)
+            // console.log('已经上传的数据长度', res.totalBytesSent)
+            // console.log('预期需要上传的数据总长度', res.totalBytesExpectedToSend)
         })
         
     }

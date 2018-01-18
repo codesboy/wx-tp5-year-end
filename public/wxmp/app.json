@@ -1,12 +1,33 @@
 {
     "pages": [
-        "pages/welcome/welcome"
+        "pages/welcome/welcome",
+        "pages/barrage/barrage",
+        "pages/vote/vote"
     ],
-    "window":
-    {
+    "window": {
         "backgroundTextStyle": "light",
         "navigationBarBackgroundColor": "#262626",
         "navigationBarTitleText": "2018贝臣年会",
         "navigationBarTextStyle": "white"
+    },
+    "tabBar": {
+        "color": "#a9b7b7",
+        "selectedColor": "#11cd6e",
+        "borderStyle": "#666",
+        "backgroundColor":"#eee",
+        "list": [
+            {
+                "pagePath": "pages/welcome/welcome",
+                "text": "签到"
+            },
+            {
+                "pagePath": "pages/barrage/barrage",
+                "text": "弹幕"
+            },
+            {
+                "pagePath": "pages/vote/vote",
+                "text": "投票"
+            }
+        ]
     }
 }

@@ -1,0 +1,8 @@
+<!--pages/barrage/barrage.wxml-->
+<view>
+    <form bindsubmit="sendBarrage">
+        <text>弹幕内容(比如你的新年愿望、想对谁说的话等等)：</text>
+        <input placeholder="随便说点什么吧！" placeholder-class='placeholder' name='msg' value='{{form_info}}' />
+        <button form-type='submit' type='primary'>发送</button>
+    </form>
+</view>

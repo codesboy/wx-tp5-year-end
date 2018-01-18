@@ -3,7 +3,9 @@ namespace app\api\validate;
 use app\api\validate\BaseValidate;
 class Upload extends BaseValidate{
     protected $rule=[
-        'file'=>'require|image|fileSize:6291456'
+        'file'=>'require|image|fileSize:10485760'
+        // 6291456  6M
+        //
         // 'sign_num'=>'require|isPositiveInteger|unique:uploads'
     ];
 

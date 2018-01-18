@@ -1,0 +1,13 @@
+/* pages/barrage/barrage.wxss */
+input{
+    width: 100%;
+    border:1px solid #ccc;
+    margin: 15px 0;
+    border-radius: 5px;
+    padding: 2px 3px;
+    font-size: 13px;
+    color: #f009a6;
+}
+.placeholder{
+    font-size: 13px;
+}
