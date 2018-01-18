@@ -15,7 +15,7 @@ class Worker extends Server
      */
     public function onMessage($connection, $data)
     {
-        $connection->send('我收到你的信息了');
+        $connection->send('我收到你的信息了!');
     }
 
     /**
