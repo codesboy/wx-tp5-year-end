@@ -437,8 +437,12 @@ class Query
      * @param  string $tableName 数据表名
      * @return array
      */
-    public function getTableFields($tableName)
+    public function getTableFields($tableName = '')
     {
+        if ('' == $tableName) {
+            $tableName = isset($this->options['table']) ? $this->options['table'] : $this->getTable();
+        }
+
         return $this->connection->getTableFields($tableName);
     }
 
@@ -449,8 +453,12 @@ class Query
      * @param  string $field    字段名
      * @return array|string
      */
-    public function getFieldsType($tableName, $field = null)
+    public function getFieldsType($tableName = '', $field = null)
     {
+        if ('' == $tableName) {
+            $tableName = isset($this->options['table']) ? $this->options['table'] : $this->getTable();
+        }
+
         return $this->connection->getFieldsType($tableName, $field);
     }
 
@@ -911,11 +919,11 @@ class Query
 
         if (true === $field) {
             // 获取全部字段
-            $fields = $this->getTableFields($tableName ?: (isset($this->options['table']) ? $this->options['table'] : $this->getTable()));
+            $fields = $this->getTableFields($tableName);
             $field  = $fields ?: ['*'];
         } elseif ($except) {
             // 字段排除
-            $fields = $this->getTableFields($tableName ?: (isset($this->options['table']) ? $this->options['table'] : $this->getTable()));
+            $fields = $this->getTableFields($tableName);
             $field  = $fields ? array_diff($fields, $field) : $field;
         }
 
@@ -1672,6 +1680,33 @@ class Query
     }
 
     /**
+     * 指定Field排序 order('id',[1,2,3],'desc')
+     * @access public
+     * @param  string|array $field 排序字段
+     * @param  string       $values 排序值
+     * @param  string       $order
+     * @return $this
+     */
+    public function orderField($field, array $values = [], $order = '')
+    {
+        $values['sort'] = $order;
+
+        $this->options['order'][$field] = $values;
+        return $this;
+    }
+
+    /**
+     * 随机排序
+     * @access public
+     * @return $this
+     */
+    public function orderRand()
+    {
+        $this->options['order'][] = '[rand]';
+        return $this;
+    }
+
+    /**
      * 查询缓存
      * @access public
      * @param  mixed             $key    缓存key
@@ -1869,6 +1904,18 @@ class Query
     public function sequence($sequence = null)
     {
         $this->options['sequence'] = $sequence;
+        return $this;
+    }
+
+    /**
+     * 设置JSON字段信息
+     * @access public
+     * @param  array $json JSON字段
+     * @return $this
+     */
+    public function json(array $json = [])
+    {
+        $this->options['json'] = $json;
         return $this;
     }
 
@@ -2076,9 +2123,10 @@ class Query
      * 设置关联查询JOIN预查询
      * @access public
      * @param  string|array $with 关联方法名称
+     * @param  bool|array   $cache 设置关联缓存
      * @return $this
      */
-    public function with($with)
+    public function with($with, $cache = false)
     {
         if (empty($with)) {
             return $this;
@@ -2128,6 +2176,8 @@ class Query
         } else {
             $this->options['with'] = $with;
         }
+
+        $this->options['relation_cache'] = $cache;
 
         return $this;
     }
@@ -2488,7 +2538,7 @@ class Query
 
                 if (!empty($this->options['with'])) {
                     // 预载入
-                    $result->eagerlyResultSet($resultSet, $this->options['with']);
+                    $result->eagerlyResultSet($resultSet, $this->options['with'], $this->options['relation_cache']);
                 }
 
                 // 模型数据集转换
@@ -2496,9 +2546,17 @@ class Query
             } else {
                 $resultSet = $this->model->toCollection($resultSet);
             }
-        } elseif ('collection' == $this->connection->getConfig('resultset_type')) {
-            // 返回Collection对象
-            $resultSet = new Collection($resultSet);
+        } else {
+            if (!empty($this->options['json'])) {
+                foreach ($resultSet as &$result) {
+                    $this->jsonResult($result, $this->options['json'], true);
+                }
+            }
+
+            if ('collection' == $this->connection->getConfig('resultset_type')) {
+                // 返回Collection对象
+                $resultSet = new Collection($resultSet);
+            }
         }
 
         // 返回结果处理
@@ -2545,12 +2603,31 @@ class Query
             if (!empty($this->model)) {
                 // 返回模型对象
                 $this->resultToModel($result, $this->options);
+            } elseif (!empty($this->options['json'])) {
+                $this->jsonResult($result, $this->options['json'], true);
             }
         } elseif (!empty($this->options['fail'])) {
             $this->throwNotFound($this->options);
         }
 
         return $result;
+    }
+
+    /**
+     * JSON字段数据转换
+     * @access protected
+     * @param  array $result     查询数据
+     * @param  array $json       JSON字段
+     * @param  bool  $assoc      是否转换为数组
+     * @return void
+     */
+    protected function jsonResult(&$result, $json = [], $assoc = false)
+    {
+        foreach ($json as $name) {
+            if (isset($result[$name])) {
+                $result[$name] = json_decode($result[$name], $assoc);
+            }
+        }
     }
 
     /**
@@ -2563,6 +2640,9 @@ class Query
      */
     protected function resultToModel(&$result, $options = [], $resultSet = false)
     {
+        if (!empty($options['json'])) {
+            $this->jsonResult($result, $options['json']);
+        }
 
         $condition = (!$resultSet && isset($options['where']['AND'])) ? $options['where']['AND'] : null;
         $result    = $this->model->newInstance($result, $condition);
@@ -2574,7 +2654,7 @@ class Query
 
         // 预载入查询
         if (!$resultSet && !empty($options['with'])) {
-            $result->eagerlyResult($result, $options['with']);
+            $result->eagerlyResult($result, $options['with'], $options['relation_cache']);
         }
 
         // 关联统计
