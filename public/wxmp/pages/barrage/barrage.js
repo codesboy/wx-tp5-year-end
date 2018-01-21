@@ -41,8 +41,13 @@ Page({
     sendBarrage: function (e) {
         var _this = this;
         var sendMsg = e.detail.value.msg;
+        var sendMsg = {
+            msg: e.detail.value.msg,
+            token: app.globalData.token
+        };
+
         
-        if (!sendMsg){
+        if (!sendMsg.msg){
             wx.showToast({
                 title: '不能发空的内容哦~',
                 duration:2000,
@@ -51,12 +56,15 @@ Page({
             return false;
        }
         wx.sendSocketMessage({
-            data:sendMsg
+            data:JSON.stringify(sendMsg)
         });
         console.log("给服务端发送一个消息："+sendMsg);
         
 
         wx.onSocketMessage(function (res) {
+            _this.setData({
+                form_info:''
+            })
             console.log("收到服务端的消息：" + res.data);
         }); 
 
