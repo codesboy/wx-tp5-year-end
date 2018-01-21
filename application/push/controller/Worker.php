@@ -6,8 +6,9 @@ use think\worker\Server;
 
 class Worker extends Server
 {
-    protected $socket = 'websocket://year.com:2346';
+    protected $socket = 'websocket://172.18.215.130:2346';
 
+    protected $C=[];
     /**
      * 收到信息
      * @param $connection
@@ -15,15 +16,31 @@ class Worker extends Server
      */
     public function onMessage($connection, $data)
     {
-        $connection->send('我收到你的信息了!');
+       // $connection->send('我收到你的信息了哦~~');
+
+       // $connection->send('服务端收到了:'.json_encode($data));
+
+        foreach ($this->C as $_connection){
+             $_connection->send('服务端收到了来自'.$connection->id.'的消息:'.json_encode($data));
+        }
+
     }
+
 
     /**
      * 当连接建立时触发的回调函数
      * @param $connection
      */
-    public function onConnect($connection)
+    public function onConnect($_connection)
     {
+        //print_r($this->serverWorker->connections);
+        //$connection->send('client_id:'.$connection->id.'|');
+        echo "新客户端建立连接".$_connection->id;
+
+        $this->C[]=$_connection;
+
+        $_connection->send('你的ID为：'.$_connection->id);
+
 
     }
 
@@ -53,6 +70,6 @@ class Worker extends Server
      */
     public function onWorkerStart($worker)
     {
-
+        $this->serverWorker=$worker;
     }
 }

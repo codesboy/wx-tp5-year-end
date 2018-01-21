@@ -7,17 +7,30 @@
 <meta name="description" content="">
 <meta name="keywords" content="">
 <link href="" rel="stylesheet">
+<script src="https://cdn.bootcss.com/jquery/1.12.3/jquery.js"></script>
 </head>
 <body>
+
+
+    <div id="message">
+
+    </div>
     <script>
-        ws = new WebSocket("ws://year.com:2346");
-        ws.onopen = function() {
-            alert("连接成功");
-            ws.send('tom');
-            alert("给服务端发送一个字符串：tom");
+        var Box=$('#message');
+
+        function debug(obj){
+            console.log(obj);
+        }
+
+        ws = new WebSocket("wss://me.rehack.cn");
+        ws.onopen = function(e) {
+           // ws.send('tom1');
+           // alert("给服务端发送一个字符串：tom");
+           debug('开始连接');
         };
         ws.onmessage = function(e) {
-            alert("收到服务端的消息：" + e.data);
+            Box.append('<li>'+e.data+'</li>');
+            debug("收到服务端的消息了：" + e.data);
         };
     </script>
 </body>

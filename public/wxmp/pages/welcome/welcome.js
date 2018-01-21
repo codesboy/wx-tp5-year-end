@@ -6,7 +6,8 @@ Page({
         motto: 'Hello World',
         userInfo: {},
         tempFilePaths:null,
-        per:''//上传进度
+        per:'',//上传进度
+        btnDisable:false,//submit按钮的禁用状态
     },
     onLoad: function () {
         console.log('onLoad');
@@ -109,6 +110,7 @@ Page({
                 wx.showModal({
                     title: '错误',
                     content: e.errMsg,
+                    showCancel:false
                 })
             }
         });
@@ -129,7 +131,7 @@ Page({
         // console.log(app.globalData)
         const uploadTask = wx.uploadFile({
             // url: 'http://year.com/api/v1/upload/user', //后台图片上传接口
-            url: app.globalData.baseUrl +'/sign', //后台图片上传接口
+            url: app.globalData.baseUrl +'/sign', //后台图片上传签到接口
             filePath: this.data.tempFilePaths[0],
             name: 'image',
             header: {"token":app.globalData.token},
@@ -140,17 +142,22 @@ Page({
                 var data = JSON.parse(res.data);
                 // console.log(data)
                 if(data.code==201 && data.msg=='OK'){
+                    _this.setData({
+                        btnDisable:true,
+                        tempFilePaths: ''
+                    })
                     wx.showToast({
                         title: '签到成功!',
                         duration:2000
                     });
-                    _this.setData({
-                        tempFilePaths:''
-                    })
+                    wx.switchTab({
+                        url:'/pages/barrage/barrage'
+                    });
                 }else{
                     wx.showModal({
                         title: '错误',
                         content: JSON.stringify(data),
+                        showCancel: false
                     })
                 }
             },
@@ -158,6 +165,7 @@ Page({
                 wx.showModal({
                     title: '错误',
                     content: e.errMsg,
+                    showCancel: false
                 })
             }
         });

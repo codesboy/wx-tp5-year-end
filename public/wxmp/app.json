@@ -6,7 +6,7 @@
     ],
     "window": {
         "backgroundTextStyle": "light",
-        "navigationBarBackgroundColor": "#262626",
+        "navigationBarBackgroundColor": "#35b0fd",
         "navigationBarTitleText": "2018贝臣年会",
         "navigationBarTextStyle": "white"
     },
@@ -14,7 +14,7 @@
         "color": "#a9b7b7",
         "selectedColor": "#11cd6e",
         "borderStyle": "#666",
-        "backgroundColor":"#eee",
+        "backgroundColor":"#fcfcfc",
         "list": [
             {
                 "pagePath": "pages/welcome/welcome",

@@ -1,13 +1,13 @@
 <!-- welcome.wxml -->
 <view class="container">
     <form bindsubmit="userUpload">
-        <text>请上传一张你的照片</text>
+        <view class='tit'>请上传一张你的照片,后面可以参与抽奖哦~</view>
         <view class='imgs'>
             <image src='/static/add.png' class='choosepic' bindtap='chooseimg'></image>
             <image class="preimg" src="{{tempFilePaths[0]}}" data-id="{{idx}}"></image>
         </view>
         <progress percent="{{per}}" show-info />
-        <button form-type='submit' type='primary'>发送</button>
+        <button form-type='submit' type='primary' disabled='{{btnDisable}}'>上传</button>
         <!-- <view bindtap="bindViewTap" class="userinfo">
             <image class="userinfo-avatar" src="{{userInfo.avatarurl}}" background-size="cover"></image>
             <text class="userinfo-nickname">{{userInfo.nickname}}</text>

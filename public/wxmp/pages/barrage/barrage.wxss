@@ -1,4 +1,8 @@
 /* pages/barrage/barrage.wxss */
+.container{
+    width: 90%;
+    margin: 0 auto;
+}
 input{
     width: 100%;
     border:1px solid #ccc;
@@ -11,3 +15,4 @@ input{
 .placeholder{
     font-size: 13px;
 }
+.tit{text-align: center;font-size: 16px;}
