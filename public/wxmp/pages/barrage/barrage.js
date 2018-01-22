@@ -51,7 +51,8 @@ Page({
         var _this = this;
         // var token = app.globalData.token;
         // console.log(token)
-        var avatarurl = app.globalData.avatarurl;
+        // 从本地缓存读取用户头像图片名
+        var avatarurl = wx.getStorageSync('avatarurl');
         if (!avatarurl) {
             wx.showModal({
                 title: '错误',
@@ -83,10 +84,11 @@ Page({
     // 发送弹幕
     sendBarrage: function (e) {
         var _this = this;
-        var sendMsg = e.detail.value.msg;
+        var locavatarurl = wx.getStorageSync('avatarurl');
+        console.log(typeof(locavatarurl))
         var sendMsg = {
             msg: e.detail.value.msg,
-            token: app.globalData.token
+            avatarurl: locavatarurl
         };
 
         
@@ -100,20 +102,22 @@ Page({
        }
         wx.sendSocketMessage({
             data:JSON.stringify(sendMsg)
+            // data: sendMsg
         });
-        console.log("给服务端发送一个消息："+sendMsg);
+        console.log("给服务端发送一个消息：" + JSON.stringify(sendMsg));
         
 
         wx.onSocketMessage(function (res) {
             _this.setData({
                 form_info:''
             })
-            console.log("收到服务端的消息：" + res.data);
+            // console.log("收到服务端的消息：" + res.data);
+            console.log(res.data);
         }); 
 
         
         // wx.request({
-        //     url: app.globalData.baseUrl + '/sendbarrage', //发送弹幕接口
+        //     url: app.globalData.baseUrl + '/sendbarrage', //发送弹幕存数据库接口
         //     method:'POST',
         //     header: {
         //         'content-type': 'application/json', // 默认值

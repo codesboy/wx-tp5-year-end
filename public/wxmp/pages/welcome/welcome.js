@@ -55,6 +55,7 @@ Page({
     },
     userUpload: function(e){
         let _this= this;
+        let token = wx.getStorageSync('token');
         // console.log(e.detail);
         // console.log(this.data);
         // console.log(app.globalData)
@@ -63,7 +64,7 @@ Page({
             url: app.globalData.baseUrl +'/sign', //后台图片上传签到接口
             filePath: this.data.tempFilePaths[0],
             name: 'image',
-            header: {"token":app.globalData.token},
+            header: {"token":token},
             success: function (res) {
                 console.log(res.data)
                 // console.log(typeof(res.data))
@@ -75,7 +76,9 @@ Page({
                         btnDisable:true,
                         tempFilePaths: ''
                     });
-                    app.globalData.avatarurl=data;
+                    // app.globalData.avatarurl=data;
+                    // 把用户头像图片文件名存到本地缓存
+                    wx.setStorageSync('avatarurl', data)
                     // console.log(app.globalData)
                     wx.showToast({
                         title: '签到成功!',
@@ -87,7 +90,7 @@ Page({
                 }else{
                     wx.showModal({
                         title: '错误',
-                        content: e.errMsg,
+                        content: JSON.stringify(res.data),
                         showCancel: false
                     })
                 }

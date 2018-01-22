@@ -15,7 +15,8 @@ App({
                         data:{code:code},
                         method:'POST',
                         success:res=>{
-                            _this.globalData.token = res.data.token;
+                            wx.setStorageSync('token', res.data.token)
+                            // _this.globalData.token = res.data.token;
                             // console.log(_this.globalData.token)
                         },
                         fail:function(e){
@@ -36,9 +37,7 @@ App({
     },
     globalData:{
         code:null,
-        token:null,
-        avatarurl:null,
-        // baseUrl:'https://me.rehack.cn/api/v1/'
-        baseUrl: 'http://year.com/api/v1/'
+        baseUrl:'https://me.rehack.cn/api/v1/'
+        // baseUrl: 'http://year.com/api/v1/'
     }
 })  

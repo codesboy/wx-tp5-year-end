@@ -107,7 +107,7 @@ class User{
 
         $image = Image::open($file);
         // 图片压缩处理
-        $image->thumb(800, 800, Image::THUMB_CENTER);
+        $image->thumb(300, 300, Image::THUMB_CENTER);
 
         // 唯一文件名 微妙md5加密
         $saveName = md5(uniqid(microtime(true),true)) . '.' . $image->type();
