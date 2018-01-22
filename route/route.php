@@ -26,3 +26,6 @@ Route::post('api/:version/sign','api/:version.User/sign');
 
 // 用户发送弹幕接口
 Route::post('api/:version/sendbarrage','api/:version.Barrage/send');
+
+// 获取用户头像接口
+Route::post('api/:version/getavator','api/:version.User/getAvator');

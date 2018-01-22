@@ -62,7 +62,10 @@ class User{
         // 更新用户数据
         $user->save($data);
 
-        return json_encode(new SuccessMessage());
+        $avatarurl=$user->avatarurl;
+        return $avatarurl;
+
+        // return json_encode(new SuccessMessage());
 
     }
 
@@ -119,4 +122,11 @@ class User{
 
     }
 
+    public function getAvator(){
+        $uid = TokenService::getCurrentUID();
+        // return $uid;die;
+        $user = UserModel::get($uid);
+        $avatarurl = $user->avatarurl;
+        return $avatarurl;
+    }
 }

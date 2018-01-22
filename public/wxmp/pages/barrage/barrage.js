@@ -6,20 +6,65 @@ Page({
      * 页面的初始数据
      */
     data: {
-        form_info:''
+        form_info:'',
+        btnDisable: true,//submit按钮的禁用状态
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
+        
         wx.connectSocket({
             url: 'wss://me.rehack.cn'
         });
         wx.onSocketOpen(function (res) {
             console.log("连接成功");
-            
+
         });
+
+
+        // wx.connectSocket({
+        //     url: 'wss://me.rehack.cn'
+        // });
+        // wx.onSocketOpen(function (res) {
+        //     console.log("连接成功");
+            
+        // });
+        // // 如果断开重新连接
+        // wx.onSocketClose(function (res) {
+        //     console.log('WebSocket 已关闭！');
+        //     wx.connectSocket({
+        //         url: 'wss://me.rehack.cn'
+        //     });
+        //     wx.onSocketOpen(function (res) {
+        //         console.log("重新连接成功");
+
+        //     });
+        // });
+        // wx.onSocketMessage(function (res) {
+        //     console.log("收到服务端的消息：" + res.data);
+        // }); 
+
+    },
+    onShow:function(){
+        var _this = this;
+        // var token = app.globalData.token;
+        // console.log(token)
+        var avatarurl = app.globalData.avatarurl;
+        if (!avatarurl) {
+            wx.showModal({
+                title: '错误',
+                content: '您还没有上传照片签到哦~',
+                showCancel: false
+            });
+
+        } else {
+            this.setData({
+                btnDisable: false
+            });
+            
+        };
         // 如果断开重新连接
         wx.onSocketClose(function (res) {
             console.log('WebSocket 已关闭！');
@@ -34,9 +79,7 @@ Page({
         // wx.onSocketMessage(function (res) {
         //     console.log("收到服务端的消息：" + res.data);
         // }); 
-
     },
-
     // 发送弹幕
     sendBarrage: function (e) {
         var _this = this;

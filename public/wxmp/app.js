@@ -37,7 +37,8 @@ App({
     globalData:{
         code:null,
         token:null,
-        baseUrl:'https://me.rehack.cn/api/v1/'
-        // baseUrl: 'http://year.com/api/v1/'
+        avatarurl:null,
+        // baseUrl:'https://me.rehack.cn/api/v1/'
+        baseUrl: 'http://year.com/api/v1/'
     }
 })  
