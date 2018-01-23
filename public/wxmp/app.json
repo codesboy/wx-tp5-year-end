@@ -1,8 +1,10 @@
 {
     "pages": [
+        "pages/vote/vote",
         "pages/welcome/welcome",
         "pages/barrage/barrage",
-        "pages/vote/vote"
+        "pages/dev/dev"
+        
     ],
     "window": {
         "backgroundTextStyle": "light",
@@ -14,7 +16,7 @@
         "color": "#a9b7b7",
         "selectedColor": "#11cd6e",
         "borderStyle": "#666",
-        "backgroundColor":"#fcfcfc",
+        "backgroundColor": "#fcfcfc",
         "list": [
             {
                 "pagePath": "pages/welcome/welcome",
@@ -27,6 +29,10 @@
             {
                 "pagePath": "pages/vote/vote",
                 "text": "投票"
+            },
+            {
+                "pagePath": "pages/dev/dev",
+                "text": "管理"
             }
         ]
     }

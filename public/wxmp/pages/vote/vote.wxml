@@ -1,2 +1,11 @@
 <!--pages/vote/vote.wxml-->
-<text>pages/vote/vote.wxml</text>
+<view class='container'>
+    <view wx:if="{{voteShow}}">投票尚未开始,或已经结束~</view>
+    <view wx:else class='votelist'>
+        <view class='tit'>请为以下团队投票，每个人只能投一次，每次只能投一个</view>
+        <view wx:for='{{tmimgs}}'bindtap='vote' data-id='{{item.id}}'>
+            <image src='https://me.rehack.cn/uploads/{{item.team_img}}'></image>
+            <icon type="success" size="40" color="pink"/>
+        </view>
+    </view>
+</view>

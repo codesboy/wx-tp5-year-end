@@ -1,0 +1,27 @@
+<!--pages/dev.wxml-->
+<view class='container'>
+    <input wx:if="{{notadmin}}" placeholder="输入管理密码" bindblur="bindBlur"  value='{{form_info}}' />
+    <view wx:else>
+        <form bindsubmit="teamUpload">
+            <view class='tit'>请上传团队照用于投票~</view>
+            <view class='imgs'>
+                <image src='/static/add.png' class='choosepic' bindtap='chooseimg'></image>
+                <image class="preimg" src="{{tempFilePaths[0]}}" data-id="{{idx}}"></image>
+            </view>
+            <progress percent="{{per}}" show-info />
+            <button form-type='submit' type='primary' disabled='{{btnDisable}}'>上传</button>
+            <!-- <view bindtap="bindViewTap" class="userinfo">
+                <image class="userinfo-avatar" src="{{userInfo.avatarurl}}" background-size="cover"></image>
+                <text class="userinfo-nickname">{{userInfo.nickname}}</text>
+            </view> -->
+        </form>
+        <!-- <button bindtap="setDisabled">查看已上传团队照</button> -->
+        <button bindtap="openVote">上传完毕，开启投票功能</button>
+        <button bindtap="closeVote">投票结束</button>
+
+        <view  class='previmg'>
+            <image wx:for="{{imgs}}" src='https://me.rehack.cn/uploads/{{item}}'></image>
+        </view>
+    </view>
+    <!-- <button form-type='submit'  type='primary' disabled='{{btnDisable}}'>进入</button> -->
+</view>
