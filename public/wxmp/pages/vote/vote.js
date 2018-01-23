@@ -61,7 +61,7 @@ Page({
     vote:function(e){
         var _this = this;
         // console.log(e)
-        if(this.data.isVote){
+        if (this.data.isVote || wx.getStorageSync('isVote')){
             wx.showToast({
                 title: '您已经投过票了,请勿重复投票!',
                 duration:3000,
@@ -82,6 +82,7 @@ Page({
                     _this.setData({
                         isVote: true
                     });
+                    wx.setStorageSync('isVote', true)
                     wx.showToast({
                         title: '投票成功!',
                         duration: 3000
@@ -92,4 +93,12 @@ Page({
         })
     },
 
+    // onHide:function(){
+    //     console.log('hide');
+    //     if (this.data.isVote) {
+    //         this.setData({
+    //             isVote:true
+    //         })
+    //     }
+    // }
 })

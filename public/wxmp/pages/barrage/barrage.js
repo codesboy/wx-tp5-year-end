@@ -15,39 +15,28 @@ Page({
      */
     onLoad: function (options) {
         
+        
+    },
+    onShow:function(){
         wx.connectSocket({
-            url: 'wss://me.rehack.cn'
+            url: 'wss://me.rehack.cn',
+            success:function(){
+                wx.showToast({
+                    title: 'onShow时连接成功',
+                    icon:'none'
+                })
+            },
+            fail:function(e){
+                wx.showModal({
+                    title: '错误',
+                    content: e.errMsg,
+                    showCancel:false
+                })
+            }
         });
         wx.onSocketOpen(function (res) {
             console.log("连接成功");
-
         });
-
-
-        // wx.connectSocket({
-        //     url: 'wss://me.rehack.cn'
-        // });
-        // wx.onSocketOpen(function (res) {
-        //     console.log("连接成功");
-            
-        // });
-        // // 如果断开重新连接
-        // wx.onSocketClose(function (res) {
-        //     console.log('WebSocket 已关闭！');
-        //     wx.connectSocket({
-        //         url: 'wss://me.rehack.cn'
-        //     });
-        //     wx.onSocketOpen(function (res) {
-        //         console.log("重新连接成功");
-
-        //     });
-        // });
-        // wx.onSocketMessage(function (res) {
-        //     console.log("收到服务端的消息：" + res.data);
-        // }); 
-
-    },
-    onShow:function(){
         var _this = this;
         // var token = app.globalData.token;
         // console.log(token)
@@ -67,25 +56,66 @@ Page({
             
         };
         // 如果断开重新连接
-        wx.onSocketClose(function (res) {
-            console.log('WebSocket 已关闭！');
-            wx.connectSocket({
-                url: 'wss://me.rehack.cn'
-            });
-            wx.onSocketOpen(function (res) {
-                console.log("重新连接成功");
+        // wx.onSocketClose(function (res) {
+        //     console.log('WebSocket 已关闭！');
+        //     wx.connectSocket({
+        //         url: 'wss://me.rehack.cn',
+        //         fail: function (e) {
+        //             wx.showModal({
+        //                 title: '错误',
+        //                 content: e.errMsg,
+        //                 showCancel: false
+        //             })
+        //         }
+        //     });
+        //     wx.onSocketOpen(function (res) {
+        //         console.log("重新连接成功");
 
-            });
-        });
-        // wx.onSocketMessage(function (res) {
-        //     console.log("收到服务端的消息：" + res.data);
-        // }); 
+        //     });
+        // });
     },
     // 发送弹幕
     sendBarrage: function (e) {
+        wx.connectSocket({
+            url: 'wss://me.rehack.cn',
+            success: function () {
+                wx.showToast({
+                    title: 'send时连接成功',
+                    icon: 'none'
+                })
+            },
+            fail: function (e) {
+                wx.showModal({
+                    title: 'send connectSocket错误',
+                    content: e.errMsg,
+                    showCancel: false
+                })
+            }
+        });
+        wx.onSocketOpen(function (res) {
+            console.log("连接成功");
+        });
+        // // 如果断开重新连接
+        // wx.onSocketClose(function (res) {
+        //     console.log('WebSocket 已关闭！');
+        //     wx.connectSocket({
+        //         url: 'wss://me.rehack.cn',
+        //         fail: function (e) {
+        //             wx.showModal({
+        //                 title: '错误',
+        //                 content: e.errMsg,
+        //                 showCancel: false
+        //             })
+        //         }
+        //     });
+        //     wx.onSocketOpen(function (res) {
+        //         console.log("重新连接成功");
+
+        //     });
+        // });
+        
         var _this = this;
         var locavatarurl = wx.getStorageSync('avatarurl');
-        console.log(typeof(locavatarurl))
         var sendMsg = {
             msg: e.detail.value.msg,
             avatarurl: locavatarurl
@@ -99,14 +129,27 @@ Page({
                 icon: 'none'
             });
             return false;
-       }
+        };
+       
+        // Bug 手机上 自定义函数里不能直接用wx.sendSocketMessage
         wx.sendSocketMessage({
-            data:JSON.stringify(sendMsg)
+            data:JSON.stringify(sendMsg),
+            success:function(){
+                wx.showToast({
+                    title: '弹幕发送成功',
+                });
+                // wx.closeSocket()//发送成功后主动断开 避免下次发送重复连接 解决bug
+            },
+            fail:function(e){
+                wx.showModal({
+                    title: 'send错误',
+                    content: e.errMsg,
+                })
+            }
             // data: sendMsg
         });
-        console.log("给服务端发送一个消息：" + JSON.stringify(sendMsg));
         
-
+        // 第一次手机预览不会执行 BUG?
         wx.onSocketMessage(function (res) {
             _this.setData({
                 form_info:''
@@ -114,7 +157,6 @@ Page({
             // console.log("收到服务端的消息：" + res.data);
             console.log(res.data);
         }); 
-
         
         // wx.request({
         //     url: app.globalData.baseUrl + '/sendbarrage', //发送弹幕存数据库接口
@@ -151,5 +193,9 @@ Page({
         //         })
         //     }
         // })
+    },
+
+    onHide:function(){
+        wx.closeSocket();
     }
 })
