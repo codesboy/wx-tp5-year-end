@@ -1,8 +1,8 @@
 {
     "pages": [
-        "pages/vote/vote",
         "pages/welcome/welcome",
         "pages/barrage/barrage",
+        "pages/vote/vote",
         "pages/dev/dev"
         
     ],

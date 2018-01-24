@@ -7,8 +7,8 @@ Page({
      * 页面的初始数据
      */
     data: {
-        psw:'周波',
-        notadmin:false,
+        psw:'周',
+        notadmin:true,
         tempFilePaths: null,
         per: '',//上传进度
         btnDisable: false,//submit按钮的禁用状态
