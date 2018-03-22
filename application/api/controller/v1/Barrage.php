@@ -56,9 +56,8 @@ class Barrage{
         $last_barrage=BarrageModel::get();
         $count=BarrageModel::count();
         return [
-            'last_barrage'=>$last_barrage,
-            'count'=>
-        ]
+            'last_barrage'=>$last_barrage
+        ];
     }
 
 }
